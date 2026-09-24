@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Szülinapodracuccli</title>
+  <!-- Konfetti könyvtár betöltése -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js">
+    
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* Lila gradiens háttér */
+      background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 50%, #c471ed 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* Lebegő emojik stílusa */
+    .floating-item {
+      position: absolute;
+      bottom: -50px;
+      animation: floatUp 8s linear infinite;
+      user-select: none;
+      z-index: 0;
+      pointer-events: none;
+    }
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Fő kártya */
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 35px 25px;
+      border-radius: 28px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+      text-align: center;
+      max-width: 440px;
+      width: 100%;
+      z-index: 1;
+      position: relative;
+    }
+    h2 {
+      color: #6a11cb;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    /* Gombok konténere */
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 13px 20px;
+      border: none;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, filter 0.2s;
+    }
+    .btn:hover {
+      transform: scale(1.02);
+      filter: brightness(1.08);
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Különböző gombszínek lilás harmóniában */
+    .btn-1 { background: linear-gradient(45deg, #8e2de2, #4a00e0); }
+    .btn-2 { background: linear-gradient(45deg, #b83b5e, #f08a5d); }
+    .btn-3 { background: linear-gradient(45deg, #11998e, #38ef7d); }
+
+    /* Megjelenő válaszdobozok */
+    .valasz-doboz {
+      display: none;
+      padding: 20px;
+      border-radius: 18px;
+      text-align: left;
+      line-height: 1.6;
+      color: #333;
+      font-size: 15px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+      animation: felbukkan 0.4s ease;
+    }
+    .valasz-doboz h3 {
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+    @keyframes felbukkan {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #cursor-emoji {
+  position: fixed;
+  font-size: 24px;
+  pointer-events: none; /* Ne akadályozza a gombokra kattintást */
+  z-index: 9999;
+  transition: transform 0.08s ease-out; /* Finom késleltetés a lebegő hatáshoz */
+  transform: translate(-50%, -50%);
+  display: none; /* Mobilon ne jelenjen meg */
+}
+  </style>
+
+  <!-- Előnézet beállítása chat alkalmazásokhoz (Instagram, Messenger) -->
+  <meta property="og:title" content="Ez egy ilyen nyisdmegnézdmeg">
+  <meta property="og:description" content="Amolyan ajándékcucc">
+  <meta property="og:type" content="website">
+  
+  <!-- Opcionális: Ha szeretnél egy semleges előnézeti képet (pl. egy ajándékdobozt), 
+       tegyél be egy borito.jpg nevű képet a mappádba, és add meg a teljes linkjét: -->
+   <meta property="og:image" content="https://kovacsbarni555-cloud.github.io/3z3gyl1nk-neked-l1nklink13/image.png">
+</head>
+<body>
+    <div id="cursor-emoji">🦋</div>
+
+    <!-- Különálló zeneelemek az egyes gombokhoz -->
+<audio id="zene-uzenet" src="Me More Cowboy Than You.mp3" loop></audio>
+<audio id="zene-emlek" src="Prosectura - Boldog Születésnapot!.mp3" loop></audio>
+<audio id="zene-kupon" src="Love Like You (feat. Rebecca Sugar) (End Credits).mp3" loop></audio>
+
+
+  <!-- Fellebegő emojik rétege -->
+  <div id="floating-bg"></div>
+
+  <div class="card">
+    <h2>Boldogságos szülinapot Babe!!!</h2>
+    <p class="subtitle">✨Persze majd meg is ölelgetlek meg minden✨</p>
+
+    <div class="button-group">
+      <button class="btn btn-1" onclick="mutat('uzenet')">Szavak</button>
+      <button class="btn btn-2" onclick="mutat('emlek')">🍎</button>
+      <button class="btn btn-3" onclick="mutat('kupon')">Emlékeztető</button>
+    </div>
+
+    <!-- 1. Válasz: Üzenet -->
+    <div id="uzenet" class="valasz-doboz" style="background: #f7edff; border: 1px dashed #a855f7;">
+      <h3 style="color: #6a11cb;">Love ya, chère</h3>
+      <p>Tudod, nem mindig sikerül úgy bánnom a szavakkal, mint teccene... pedig egyszerű a mondandóm: legyen fantörpikus éved, s ennek koronájául mára fergetegesen fantasztikus napod. 
+        Egyszerű a mondandóm, de mértéke nem az. Mert azt nemtom kifejezni. Hát csak hidd el. Ez a "fantörpikus" csillagokat karcoló magasságokat jelent.
+      </p>
+    </div>
+
+    <!-- 2. Válasz: Emlék -->
+    <div id="emlek" class="valasz-doboz" style="background: #fff0f3; border: 1px dashed #ff758c;">
+      <h3 style="color: #ff3366;">Ezt skubizd:</h3>
+      <p>Micsoda gyöngyszemeket talál az ember</p>
+      
+      <!-- ITT A KÉP: -->
+      <img src="alma.jpg" alt="Közös emlék" style="width: 100%; border-radius: 12px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    </div>
+
+    <!-- 3. Válasz: Ajándék / Kupon -->
+    <div id="kupon" class="valasz-doboz" style="background: #edfbf4; border: 1px dashed #10b981;">
+      <h3 style="color: #059669;">Szeretve vagy. Nagyon.</h3>
+      <p>Félelmem, hogy néha azt hiszed, csak szerelmeteskedésből mondok ilyeneket. Tudd, hogy nem. Azon több irányból túlvagyunk. Szimplán akarom, hogy tudd. Mindig.</p>
+    </div>
+  </div>
+
+  <script>
+// 1. ÉRTESÍTÉST KÜLDŐ FÜGGVÉNY (Ezt csak egyszer kell bemásolni!)
+function ertesitesKuldese(esemenyNeve) {
+  const webhookUrl = "https://discord.com/api/webhooks/1551335752275726477/_dvWjEuisONxgk19E60am9cMrQ6ZSnmcqmz0HhYIsELheWOoW6ZW4J1jlyDjVfxCQbnF";
+
+  fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      content: `🎉 **Értesítés az oldalról!** Esemény: **${esemenyNeve}** (Időpont: ${new Date().toLocaleTimeString('hu-HU')})`
+    })
+  }).catch(() => {});
+}
+
+// Ez a sor lefut magától az oldal betöltésekor:
+ertesitesKuldese("Megnyitotta a szülinapi oldalt! 🌐");
+
+
+    
+    function mutat(valasztottId) {
+  // 1. Megállítjuk az összes korábban futó zenét, és visszatekerjük az elejére
+  const zenek = ['zene-uzenet', 'zene-emlek', 'zene-kupon'];
+  zenek.forEach(id => {
+    const hang = document.getElementById(id);
+    if (hang) {
+      hang.pause();
+      hang.currentTime = 0;
+    }
+  });
+
+  // 2. Elindítjuk a kattintott gombhoz tartozó zenét
+  const kivalasztottZene = document.getElementById('zene-' + valasztottId);
+  if (kivalasztottZene) {
+    kivalasztottZene.play().catch(() => {});
+  }
+
+  // 3. Elrejtjük az összes dobozt
+  document.querySelectorAll('.valasz-doboz').forEach(doboz => {
+    doboz.style.display = 'none';
+  });
+
+  // 4. Megjelenítjük a választott dobozt
+  document.getElementById(valasztottId).style.display = 'block';
+
+  // 5. Konfetti a kuponhoz
+ /* if (valasztottId === 'kupon') {
+    confetti({
+      particleCount: 110,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }*/
+
+if (valasztottId === 'uzenet') {
+    ertesitesKuldese("Szavak");
+  } else if (valasztottId === 'emlek') {
+    ertesitesKuldese("Kép");
+  } else if (valasztottId === 'kupon') {
+    ertesitesKuldese("Emlékeztető");
+    //confetti({ particleCount: 110, spread: 70 });
+  }
+      
+}
+
+    // 2. Fellebegő lila és szülinapi emojik generálása
+    const symbols = ['❤️','🍂','🍂','🌸','🌸','🌸','🌸'];
+    const bgContainer = document.getElementById('floating-bg');
+
+    for (let i = 0; i < 18; i++) {
+      const item = document.createElement('div');
+      item.className = 'floating-item';
+      item.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+      item.style.left = Math.random() * 100 + 'vw';
+      item.style.animationDuration = (6 + Math.random() * 6) + 's';
+      item.style.animationDelay = (Math.random() * 5) + 's';
+      item.style.fontSize = (16 + Math.random() * 20) + 'px';
+      bgContainer.appendChild(item);
+    }
+
+
+    const follower = document.getElementById('cursor-emoji');
+let mouseX = 0, mouseY = 0;
+let followerX = 0, followerY = 0;
+
+// Egér aktuális pozíciójának mentése
+window.addEventListener('mousemove', (e) => {
+  follower.style.display = 'block';
+  mouseX = e.clientX + 15;
+  mouseY = e.clientY + 15;
+});
+
+// Folyamatos, lebegő közelítés (animációs ciklus)
+function animate() {
+  // A 0.08 érték határozza meg a követés sebességét
+  // (kisebb szám = még lustább lemaradás, pl. 0.04)
+  followerX += (mouseX - followerX) * 0.02;
+  followerY += (mouseY - followerY) * 0.02;
+
+  follower.style.left = followerX + 'px';
+  follower.style.top = followerY + 'px';
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+  </script>
+
+</body>
+</html>
