@@ -31,13 +31,13 @@
     /* Lebegő emojik stílusa */
     .floating-item {
       position: absolute;
-      bottom: -50px;
-      animation: floatUp 8s linear infinite;
+      top: -50px;
+      animation: fallDown 8s linear infinite;
       user-select: none;
       z-index: 0;
       pointer-events: none;
     }
-    @keyframes floatUp {
+    @keyframes fallDown {
       0% {
         transform: translateY(0) rotate(0deg);
         opacity: 0.8;
@@ -255,7 +255,7 @@ if (valasztottId === 'uzenet') {
 }
 
     // 2. Fellebegő lila és szülinapi emojik generálása
-    const symbols = ['❤️','🍂','🍂','🌸','🌸','🌸','🌸'];
+    const symbols = ['❤️','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂'];
     const bgContainer = document.getElementById('floating-bg');
 
     for (let i = 0; i < 18; i++) {
