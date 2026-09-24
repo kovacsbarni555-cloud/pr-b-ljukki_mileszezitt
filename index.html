@@ -177,10 +177,17 @@
     <!-- 2. Válasz: Emlék -->
     <div id="emlek" class="valasz-doboz" style="background: #fff0f3; border: 1px dashed #ff758c;">
       <h3 style="color: #ff3366;">Ezt skubizd:</h3>
-      <p>Micsoda gyöngyszemeket talál az ember</p>
+      <p id="emlek-szoveg">Micsoda gyöngyszemeket talál az ember</p>
       
       <!-- ITT A KÉP: -->
-      <img src="alma.jpg" alt="Közös emlék" style="width: 100%; border-radius: 12px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+      <!-- ITT A KÉP: -->
+<img id="galeria-kep" 
+     src="alma.jpg" 
+     alt="Közös emlék" 
+     onclick="kovetkezoKep()" 
+     style="width: 100%; border-radius: 12px; margin-top: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.15s ease;">
+      
+      <small style="display:block; color:#999; margin-top:6px; font-size:12px; text-align:center;">(Kattints a képre a következőért! 👆)</small>
     </div>
 
     <!-- 3. Válasz: Ajándék / Kupon -->
@@ -255,7 +262,7 @@ if (valasztottId === 'uzenet') {
 }
 
     // 2. Fellebegő lila és szülinapi emojik generálása
-    const symbols = ['❤️','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂'];
+    const symbols = ['🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂','🍂'];
     const bgContainer = document.getElementById('floating-bg');
 
     for (let i = 0; i < 18; i++) {
@@ -296,6 +303,61 @@ function animate() {
 
 animate();
 
+
+
+
+
+// 1. Képek és hozzájuk tartozó feliratok listája
+const emlekGyujtemeny = [
+  { fajl: 'alma.jpg', szoveg: 'Micsoda gyöngyszemeket talál az ember' },
+  { fajl: 'kep2.jpg', szoveg: 'Emlékszel még erre a napra? 😂' },
+  { fajl: 'kep3.jpg', szoveg: 'Ez a pillanat egyszerűen megfizethetetlen.' },
+  { fajl: 'kep4.jpg', szoveg: 'Itt épp a világot váltottuk meg!' }
+];
+
+let maradekEmlekek = [];
+
+function keveres(tomb) {
+  const masolat = [...tomb];
+  for (let i = masolat.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [masolat[i], masolat[j]] = [masolat[j], masolat[i]];
+  }
+  return masolat;
+}
+
+function kovetkezoKep() {
+  const kepElem = document.getElementById('galeria-kep');
+  const szovegElem = document.getElementById('emlek-szoveg');
+  if (!kepElem || !szovegElem || emlekGyujtemeny.length <= 1) return;
+
+  // Ha kiürült a pakli, újrakeverjük az összeset
+  if (maradekEmlekek.length === 0) {
+    maradekEmlekek = keveres(emlekGyujtemeny);
+
+    // Ha az első pont az, ami épp kint van a képernyőn, a végére tesszük
+    if (maradekEmlekek[0].fajl === kepElem.getAttribute('src')) {
+      const elso = maradekEmlekek.shift();
+      maradekEmlekek.push(elso);
+    }
+  }
+
+  // Kivesszük a következő elemet
+  const kovetkezo = maradekEmlekek.shift();
+
+  // Finom kattintási effekt, majd a kép ÉS a szöveg egyidejű cseréje
+  kepElem.style.transform = 'scale(0.96)';
+  setTimeout(() => {
+    kepElem.src = kovetkezo.fajl;
+    szovegElem.innerText = kovetkezo.szoveg;
+    kepElem.style.transform = 'scale(1)';
+  }, 120);
+
+  // Discord értesítés a váltásról
+ // if (typeof ertesitesKuldese === 'function') {
+  //  ertesitesKuldese(`Új képet nyitott meg: ${kovetkezo.fajl} 📸`);
+  }
+}
   </script>
 
 </body>
